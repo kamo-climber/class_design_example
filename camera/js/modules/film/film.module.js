@@ -16,7 +16,7 @@ export default class Film {
    * @param {FilmSpecs} specs 
    */
   constructor(specs) {
-    if(!specs instanceof FilmSpecs) { throw new Error('パラメータが正しくありません。'); }
+    if(!(specs instanceof FilmSpecs)) { throw new Error('パラメータが正しくありません。'); }
 
     const { productName, limit, iso, size } = specs;
     this.#productName = productName;

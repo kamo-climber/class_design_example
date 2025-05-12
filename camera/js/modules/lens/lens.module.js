@@ -16,7 +16,7 @@ export default class Lens {
    * @param {LensSpecs} specs 
    */
   constructor(specs) {
-    if(!specs instanceof LensSpecs) { throw new Error('パラメータが正しくありません。'); }
+    if(!(specs instanceof LensSpecs)) { throw new Error('パラメータが正しくありません。'); }
 
     const { productName, mountType, fNumber, focalLength } = specs;
     this.#productName = productName;

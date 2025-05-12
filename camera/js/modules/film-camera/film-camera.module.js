@@ -18,19 +18,12 @@ export default class FilmCamera {
    * @param {FilmCameraSpecs} specs 
    */
   constructor(specs) {
-    if(!specs instanceof FilmCameraSpecs) { throw new Error('パラメータが正しくありません。'); }
+    if(!(specs instanceof FilmCameraSpecs)) { throw new Error('パラメータが正しくありません。'); }
 
     const { productName, filmSize, lensMountType } = specs;
     this.#productName = productName;
     this.#filmSize = filmSize;
     this.#lensMountType = lensMountType;
-  }
-
-  /**
-   * @returns {void}
-   */
-  takeAphoto() {
-
   }
 
   /**
@@ -96,6 +89,10 @@ export default class FilmCamera {
    * @returns {void} 
    */
   zoom(value) {
+    if (!this.#lens) {
+      console.log('レンズを装着してください。');
+      return;
+    }
     this.#lens.zoom(value);
   }
 
@@ -103,6 +100,10 @@ export default class FilmCamera {
    * @returns {void} 
    */
   focus() {
+    if (!this.#lens) {
+      console.log('レンズを装着してください。');
+      return;
+    }
     this.#lens.focus();
   }
 

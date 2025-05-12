@@ -9,7 +9,6 @@ import Film from './film/film.module.js';
 export default class Factory {
   /** @type {Validator} */
   #validator
-  #PARAMETER_ERROR = 'パラメータが正しくありません。';
 
   /**
    * @param {Validator} validator
@@ -26,13 +25,7 @@ export default class Factory {
    * @returns {FilmCamera}
    */
   createFilmCamera(specs) {
-    this.#validate(specs, {
-      productName: v => typeof v === 'string',
-      filmSize: v => this.#validator.isPositiveNumber(v),
-      lensMountType: v => typeof v === 'string'
-    });
-
-    return new FilmCamera(new FilmCameraSpecs(specs));
+    return new FilmCamera(new FilmCameraSpecs(this.#validator, specs));
   }
 
   /**
@@ -44,16 +37,7 @@ export default class Factory {
    * @returns {Lens}
    */
   createLens(specs) {
-    this.#validate(specs, {
-      productName: v => typeof v === 'string',
-      mountType: v => typeof v === 'string',
-      fNumber: v => this.#validator.isPositiveNumber(v),
-      focalLength: v => {
-        return Array.isArray(v) && v.length <= 2 && v.every(num => this.#validator.isPositiveNumber(num));
-      }
-    });
-
-    return new Lens(new LensSpecs(specs));
+    return new Lens(new LensSpecs(this.#validator, specs));
   }
 
   /**
@@ -65,27 +49,6 @@ export default class Factory {
    * @returns {Film}
    */
   createFilm(specs) {
-    this.#validate(specs, {
-      productName: v => typeof v === 'string',
-      limit: v => this.#validator.isPositiveInteger(v),
-      iso: v => this.#validator.isPositiveInteger(v),
-      size: v => this.#validator.isPositiveInteger(v)
-    });
-
-    return new Film(new FilmSpecs(specs));
-  }
-
-  /**
-   * 共通のバリデーション処理
-   * @param {Object} specs
-   * @param {Object.<string, Function>} rules
-   */
-  #validate(specs, rules) {
-    for(const [key, validateFn] of Object.entries(rules)) {
-      const value = specs[key];
-      if(!validateFn(value)) {
-        throw new Error(this.#PARAMETER_ERROR);
-      }
-    }
+    return new Film(new FilmSpecs(this.#validator, specs));
   }
 }
