@@ -9,8 +9,6 @@ export default class LensSpecs extends Specs {
   fNumber;
   /** @type {number[]} */
   focalLength;
-  /** @type {number} */
-  zoom;
 
   /**
    * @param {validator} validator - バリデータークラス
