@@ -1,5 +1,4 @@
 export default class Specs {
-  PARAMETER_ERROR = 'パラメータが正しくありません。';
 
   /**
    * 共通のバリデーション処理
@@ -10,7 +9,7 @@ export default class Specs {
     for(const [key, validateFn] of Object.entries(rules)) {
       const value = specs[key];
       if(!validateFn(value)) {
-        throw new Error(this.PARAMETER_ERROR);
+        throw new Error(`Invalid parameter: ${key}`);
       }
     }
   }

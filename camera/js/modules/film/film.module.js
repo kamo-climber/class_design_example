@@ -71,7 +71,14 @@ export default class Film {
    * @returns {void}
    */
   shutterCounter() {
+    const remaining = this.getRemainingShutterCount();
+    
+    if(this.getRemainingShutterCount() < 1) {
+      console.log('新しいフィルムを装着して下さい。');
+      return;
+    }
+
     this.#shutterCount++
-    console.log(`残り枚数は${this.getRemainingShutterCount()}です。`);
+    console.log(`残り枚数は${remaining}です。`);
   }
 }

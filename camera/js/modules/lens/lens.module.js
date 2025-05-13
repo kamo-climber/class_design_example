@@ -69,7 +69,7 @@ export default class Lens {
     value = Math.max(value, this.#focalLength[0]);
     value = Math.min(value, this.#focalLength[1]);
 
-    console.log('ズームしました。');
+    console.log(`現在の焦点距離は${value}です`);
     this.#zoom = value;
   }
 

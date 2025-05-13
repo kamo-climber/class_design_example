@@ -34,7 +34,7 @@ export default class FilmCamera {
   mountLens(lens) {
     this.unmountLens();
 
-    if(!lens instanceof Lens) {
+    if(!(lens instanceof Lens)) {
       console.log('レンズを装着して下さい。');
       return;
     }
@@ -63,7 +63,7 @@ export default class FilmCamera {
   mountFilm(film) {
     this.unmountFilm();
 
-    if(!film instanceof Film) {
+    if(!(film instanceof Film)) {
       console.log('フィルムを装着して下さい。');
       return;
     }
