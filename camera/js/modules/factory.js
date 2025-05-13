@@ -1,54 +1,34 @@
-import FilmCameraSpecs from './film-camera/film-camera-specs.module.js';
-import FilmCamera from './film-camera/film-camera.module.js';
-import LensSpecs from './lens/lens-specs.module.js';
-import Lens from './lens/lens.module.js';
-import FilmSpecs from './film/film-specs.module.js';
-import Film from './film/film.module.js';
+export default class RegistryFactory {
+  #validator;
+  #registry = {};
 
-
-export default class Factory {
-  /** @type {Validator} */
-  #validator
-
-  /**
-   * @param {Validator} validator
-   */
   constructor(validator) {
     this.#validator = validator;
   }
 
   /**
-   * @param {Object} specs - カメラのスペック
-   * @param {string} specs.productName - カメラの製品名
-   * @param {number} specs.filmSize - カメラのフィルムサイズ
-   * @param {number} specs.lensMountType - カメラのレンズマウント
-   * @returns {FilmCamera}
+   * 製品の生成関数を登録する
+   * @param {string} type 製品タイプ（例：'film'）
+   * @param {function(validator: Validator, specs: object): any} creator
    */
-  createFilmCamera(specs) {
-    return new FilmCamera(new FilmCameraSpecs(this.#validator, specs));
+  register(type, creator) {
+    if (typeof creator !== 'function') {
+      throw new Error('creator must be a function');
+    }
+    this.#registry[type] = creator;
   }
 
   /**
-   * @param {Object} specs - レンズのスペック
-   * @param {string} specs.productName - レンズの製品名
-   * @param {number} specs.mountType - レンズのマウントタイプ
-   * @param {number} specs.fNumber - レンズのF値
-   * @param {[ number, number ]} specs.focalLength - レンズの焦点距離
-   * @returns {Lens}
+   * 製品インスタンスを生成する
+   * @param {string} type 製品タイプ
+   * @param {object} specs スペックオブジェクト
+   * @returns {any}
    */
-  createLens(specs) {
-    return new Lens(new LensSpecs(this.#validator, specs));
-  }
-
-  /**
-   * @param {Object} specs - フィルムのスペック
-   * @param {string} specs.productName - フィルムの製品名
-   * @param {number} specs.limit - フィルムの枚数
-   * @param {number} specs.iso - フィルムのISO
-   * @param {number} specs.size - フィルムのサイズ
-   * @returns {Film}
-   */
-  createFilm(specs) {
-    return new Film(new FilmSpecs(this.#validator, specs));
+  create(type, specs) {
+    const creator = this.#registry[type];
+    if (!creator) {
+      throw new Error(`Type '${type}' is not registered.`);
+    }
+    return creator(this.#validator, specs);
   }
 }
